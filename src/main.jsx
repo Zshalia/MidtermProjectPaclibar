@@ -3,6 +3,16 @@ import {createRoot} from 'react-dom/client';
 import {Menu, X, ArrowUpRight, ShieldCheck, Server, Network, Terminal, BookOpen, Search, CheckCircle2, ChevronDown, ExternalLink, GraduationCap, Target, Award, MonitorCog, ArrowRight, SlidersHorizontal} from 'lucide-react';
 import './styles.css';
 
+class AppErrorBoundary extends React.Component {
+ state={hasError:false};
+ static getDerivedStateFromError(){return {hasError:true}}
+ componentDidCatch(error){console.error('The portfolio failed to render.',error)}
+ render(){
+  if(this.state.hasError)return <div className="startup-error" role="alert" style={{margin:'3rem auto',maxWidth:'34rem',padding:'1rem',font:'1rem/1.6 sans-serif',color:'#49365f'}}><h1 style={{fontSize:'1.4rem'}}>The portfolio could not start</h1><p>Reload the page and check your internet connection. If the problem continues, check the browser console for a loading error.</p></div>;
+  return this.props.children;
+ }
+}
+
 const certifications = [
  {name:'CompTIA A+', org:'CompTIA', level:'FOUNDATIONAL', category:'Systems', desc:'A vendor-neutral starting point for IT support and systems work, covering hardware, operating systems, troubleshooting, and security basics.', skills:['Hardware & devices','Operating systems','Troubleshooting','Security fundamentals'], url:'https://www.comptia.org/certifications/a'},
  {name:'CompTIA Network+', org:'CompTIA', level:'FOUNDATIONAL', category:'Networking', desc:'Build practical knowledge for supporting wired and wireless networks, connectivity, network operations, and common troubleshooting tasks.', skills:['Network concepts','Infrastructure','Network operations','Troubleshooting'], url:'https://www.comptia.org/certifications/network'},
@@ -54,4 +64,4 @@ const categories=['All','Systems','Networking','Linux','Security','Cloud'];
   </div>
  </div>
 }
-createRoot(document.getElementById('root')).render(<App/>);
+createRoot(document.getElementById('root')).render(<AppErrorBoundary><App/></AppErrorBoundary>);
